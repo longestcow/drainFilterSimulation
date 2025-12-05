@@ -4,7 +4,6 @@
   let grid, fluid;
   let pause = false;
   let brushSize = 3, brushAcc = 0.8;
-  let cWater = 0, cMP = 0, sWater = 0, sMP = 0;
   let frame = false, nextFrame = true;
   let pKey = "1";
   let gridString = 
@@ -16,14 +15,9 @@
   // 4 = mesh (low porosity)
   // 5 = goal (pipe)
   // 6 = dirt (no porosity)
-  let sWaterp, sMPp, cWaterp, cMPp;
   function setup() {
     createCanvas(canvasSize, canvasSize);
-    sWaterp = createP(); sWaterp.position(610, 0);
-    sMPp = createP(); sMPp.position(610, 45);
-    cWaterp = createP(); cWaterp.position(610, 15);
-    cMPp = createP(); cMPp.position(610, 60);
-    resetCounters();
+
     grid = newGrid(0);
     fluid = newGrid(1);
     noStroke();
@@ -90,10 +84,6 @@
       for(let j = 0; j<cellCount; j++){
         if(fluid[i][j]!==0 && grid[i][j]==5){
           
-          if(fluid[i][j]==1) cWater+=1;
-          else if(fluid[i][j]==2) cMP+=1;
-          cWaterp.html("Collected water count: "+cWater+" ("+round(((sWater-cWater)/sWater)*100,1)+"% filtered)");
-          cMPp.html("Collected microplastic count: "+cMP+" ("+round(((sMP-cMP)/sMP)*100,1)+"% filtered)");
           fluid[i][j]=0;
         }
         if(fluid[i][j]==1) // water
@@ -160,11 +150,9 @@
             //   grid[col][row] = int(key);
             let water = random(1) < 0.9;
             fluid[col][row] = water?1:2;
-            if(water)sWater+=1;
-            else sMP+=1;
 
-            sWaterp.html("Spawned water count: "+sWater);
-            sMPp.html("Spawned microplastic count: "+sMP);
+
+
           }
         }
       }
@@ -244,13 +232,4 @@
     console.log("mmmb");
   }
 
-  function resetCounters(){
-    sWater=0;
-    sMP=0;
-    cWater=0;
-    cMP=0;
-    sWaterp.html("Spawned water count:\t"+sWater); 
-    sMPp.html("Spawned microplastic count:\t"+sMP); 
-    cWaterp.html("Collected water count:\t"+cWater+" (100% filtered)"); 
-    cMPp.html("Collected microplastic count:\t"+cMP +" (100% filtered)"); 
-  }
+
